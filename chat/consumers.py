@@ -13,5 +13,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         # Echo back whatever message the client sent
-        await self.sent(text_data=text_data)
+        await self.send(text_data=text_data)
 

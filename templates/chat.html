@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Chat test</title>
+</head>
+<body>
+    <h1>WebSocket Chat Test</h1>
+    <p>If you see this page, Django templates are working.</p>
+
+    <script>
+        // Open a WebSocket connection to your Django Channels route
+        const socket = new WebSocket("ws://localhost:8000/ws/chat/");
+
+        // Runs when the WebSocket successfully connects
+        socket.onopen = function () {
+            console.log("WebSocket connected");
+            socket.send(JSON.stringify({ message: "Hello server" }));
+        };
+
+        // Runs every time a message is received from the server
+        socket.onmessage = function (event) {
+            console.log("Received:", event.data);
+        };
+
+        // Runs when the WebSocket closes
+        socket.onclose = function () {
+            console.log("WebSocket closed");
+        };
+    </script>
+</body>
+</html>
