@@ -32,3 +32,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # Echo back whatever message the client sent
         await self.send(text_data=json.dumps(response))
+
+
+# push issue test
