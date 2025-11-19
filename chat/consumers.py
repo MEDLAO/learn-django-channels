@@ -14,9 +14,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # Accept the WebSocket connection
         await self.accept()
 
-    async def disconnect(self, close_code):
-        # Called when the socket closes
-        pass
+    async def disconnect(self, close_code):  # Called when the socket closes
+        # Remove connection from the group
+        await self.channel_layer.group_discard(
+            self.group_name,
+            self.channel_name
+        )
 
     async def receive(self, text_data=None, bytes_data=None):
         # Convert the incoming text into a Python dict
@@ -24,14 +27,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         message = data.get("message", "")
 
-        # Build a response
-        response = {
-            "type": "echo",
-            "message": message,
-        }
-
-        # Echo back whatever message the client sent
-        await self.send(text_data=json.dumps(response))
-
-
-# push issue test
+        # Broadcast the message to everyone in the group
+        await self.channel_layer.group_send(
+            self.group_name,
+            {
+                "type": "chat_message",  # calls the method named chat_message()
+                "message": message,
+            }
+        )
