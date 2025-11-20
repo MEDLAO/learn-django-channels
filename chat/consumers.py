@@ -35,3 +35,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "message": message,
             }
         )
+
+    async def chat_message(self, event):
+        # Get the message that was broadcast to the group
+        message = event["message"]
+
+        # Send the message to this Websocket client (browser)
+        await self.send(text_data=json.dumps({"message": message}))
