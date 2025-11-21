@@ -1,32 +1,50 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>Chat test</title>
+    <title>Django Channels Chat</title>
 </head>
 <body>
-    <h1>WebSocket Chat Test</h1>
-    <p>If you see this page, Django templates are working.</p>
+<h1>Simple Chat Test</h1>
 
-    <script>
-        // Open a WebSocket connection to your Django Channels route
-        const socket = new WebSocket("ws://localhost:8000/ws/chat/");
+<!-- A box that will contain all messages -->
+<div id="messages"></div>
 
-        // Runs when the WebSocket successfully connects
-        socket.onopen = function () {
-            console.log("WebSocket connected");
-            socket.send(JSON.stringify({ message: "Hello server" }));
-        };
+<!-- Input field -->
+<input id="messageInput" type="text" placeholder="Type a message">
 
-        // Runs every time a message is received from the server
-        socket.onmessage = function (event) {
-            console.log("Received:", event.data);
-        };
+<script>
+    // 1. Open WebSocket connection to your Django backend
+    const socket = new WebSocket("ws://127.0.0.1:8000/ws/chat/");
 
-        // Runs when the WebSocket closes
-        socket.onclose = function () {
-            console.log("WebSocket closed");
-        };
-    </script>
+    // 2. When WebSocket is successfully connected
+    socket.onopen = function() {
+        console.log("WebSocket connected");
+    };
+
+    // 3. Receive messages from the server
+    socket.onmessage = function(event) {
+        const data = JSON.parse(event.data);       // decode JSON
+        const msgBox = document.getElementById("messages");
+
+        const p = document.createElement("p");
+        p.innerText = data.message;                // show message
+
+        msgBox.appendChild(p);                     // add message to page
+    };
+
+    // 4. When user presses Enter in the input field → send message
+    document.getElementById("messageInput").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            const message = event.target.value;
+
+            socket.send(JSON.stringify({           // send JSON
+                "message": message
+            }));
+
+            event.target.value = "";              // clear input box
+        }
+    });
+</script>
 </body>
 </html>
