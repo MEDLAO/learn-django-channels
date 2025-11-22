@@ -15,7 +15,7 @@
 
 <script>
     // 1. Open WebSocket connection to your Django backend
-    const socket = new WebSocket("ws://127.0.0.1:8000/ws/chat/");
+    const socket = new WebSocket("ws://127.0.0.1:8000/ws/chat/room1/");
 
     // 2. When WebSocket is successfully connected
     socket.onopen = function() {
