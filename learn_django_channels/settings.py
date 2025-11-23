@@ -43,9 +43,18 @@ INSTALLED_APPS = [
 
 ASGI_APPLICATION = "learn_django_channels.asgi.application"
 
-# temporary in-memory channel layer (fine for local dev)
+# # temporary in-memory channel layer (fine for local dev)
+# CHANNEL_LAYERS = {
+#     "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}
+# }
+
 CHANNEL_LAYERS = {
-    "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
 }
 
 MIDDLEWARE = [
