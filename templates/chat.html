@@ -11,7 +11,6 @@
 <div id="messages"></div>
 
 <!-- Input field -->
-<input id="usernameInput" type="text" placeholder="Enter your username">
 <input id="messageInput" type="text" placeholder="Type a message">
 
 <script>
@@ -38,11 +37,9 @@
     document.getElementById("messageInput").addEventListener("keydown", function(event) {
         if (event.key === "Enter") {
             const message = event.target.value;
-            const username = document.getElementById("usernameInput").value;
 
 
             socket.send(JSON.stringify({           // send JSON
-                "username": username,
                 "message": message
             }));
 

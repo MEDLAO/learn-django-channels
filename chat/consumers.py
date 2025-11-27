@@ -27,7 +27,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
 
         message = data.get("message", "")
-        username = data.get("username", "Anonymous")
+        username = self.scope["user"].username
 
         # Broadcast the message to everyone in the group
         await self.channel_layer.group_send(
