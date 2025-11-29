@@ -4,6 +4,12 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        # Block anonymous users from opening WebSocket connections
+        if self.scope["user"].is_anonymous:
+            await self.close()
+            return
+
+        # Normal connection logic
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.group_name = f"chat_{self.room_name}"
 
