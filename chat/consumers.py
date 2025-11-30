@@ -33,7 +33,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
 
         message = data.get("message", "")
-        username = self.scope["user"].username
+        username = self.scope["user"].username  # real logged-in user
 
         # Broadcast the message to everyone in the group
         await self.channel_layer.group_send(
