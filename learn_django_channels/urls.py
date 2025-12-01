@@ -19,6 +19,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
+from chat.views import chat_view
 
 
 urlpatterns = [
@@ -29,5 +30,5 @@ urlpatterns = [
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
 
     # Chat page
-    path("", login_required(TemplateView.as_view(template_name="chat.html")), name="chat"),
+    path("", chat_view, name="chat"),
 ]

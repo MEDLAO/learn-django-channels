@@ -9,13 +9,18 @@
 
 <!-- A box that will contain all messages -->
 <div id="messages"></div>
+    {% for msg in messages %}
+        <p>{{ msg.user.username }}: {{ msg.content }}</p>
+    {% endfor %}
+</div>
 
 <!-- Input field -->
 <input id="messageInput" type="text" placeholder="Type a message">
 
 <script>
     // 1. Open WebSocket connection to your Django backend
-    const socket = new WebSocket("ws://127.0.0.1:8000/ws/chat/room2/");
+    const rooName = "{{ room_name }}";
+    const socket = new WebSocket("ws://127.0.0.1:8000/ws/chat/" + roomName + "/");
 
     // 2. When WebSocket is successfully connected
     socket.onopen = function() {
