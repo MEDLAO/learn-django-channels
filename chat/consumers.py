@@ -1,5 +1,6 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
+from chat.models import Message
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -33,7 +34,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
 
         message = data.get("message", "")
-        username = self.scope["user"].username  # real logged-in user
+        user = self.scope["user"]  # real logged-in user
+        username = user.username
+
+        # Save message in the database
+        Message.objects.create(
+            user=user,
+            room_name=self.room_name,
+            content=message
+        )
 
         # Broadcast the message to everyone in the group
         await self.channel_layer.group_send(
