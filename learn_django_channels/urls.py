@@ -33,5 +33,5 @@ urlpatterns = [
     path("signup/", signup_view, name="signup"),
 
     # Chat page
-    path("", chat_view, name="chat"),
+    path("chat/<str:room_name>/", chat_view, name="chat"),
 ]
