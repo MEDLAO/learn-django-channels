@@ -34,4 +34,7 @@ urlpatterns = [
 
     # Chat page
     path("chat/<str:room_name>/", chat_view, name="chat"),
+
+    # Private chat
+    path("dm/<str:username>/", dm_view, name="dm"),
 ]

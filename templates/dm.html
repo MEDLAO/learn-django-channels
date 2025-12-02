@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Private Chat with {{ other_user.username }}</title>
+</head>
+<body>
+
+<h1>Chat with {{ other_user.username }}</h1>
+
+<div id="messages">
+    {% for msg in messages %}
+        <p>
+            <strong>{{ msg.sender.username }}</strong>:
+            {{ msg.content }}
+        </p>
+    {% endfor %}
+</div>
+
+</body>
+</html>
