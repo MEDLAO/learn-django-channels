@@ -16,5 +16,35 @@
     {% endfor %}
 </div>
 
+<script>
+    // The username of the person we are talking to
+    const receiverUsername = "{{ other_user.username }}";
+
+    // Open the WebSocket connection to DMConsumer
+    const socket = new WebSocket(
+        "ws://" + window.location.host + "/ws/dm/" + receiverUsername + "/"
+    );
+
+    // Just to test that the WS is connected
+    socket.onopen = function () {
+        console.log("DM WebSocket connected!");
+    };
+
+    // When we receive a message from the server
+    socket.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+
+        const messagesDiv = document.getElementById("messages");
+        const p = document.createElement("p");
+
+        p.innerHTML = "<strong>" + data.sender + "</strong>: " + data.message;
+        messagesDiv.appendChild(p);
+    };
+
+    // For now, we are not sending messages yet.
+    // We will add sending logic later.
+</script>
+
+
 </body>
 </html>
