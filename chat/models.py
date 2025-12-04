@@ -1,12 +1,9 @@
 from django.db import models
-from django.contrib.auth import get_user_model
-
-
-User = get_user_model()
+from django.conf import settings
 
 
 class Message(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     room_name = models.CharField(max_length=255)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -16,8 +13,8 @@ class Message(models.Model):
 
 
 class DirectMessage(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_direct_messages")
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_direct_messages")
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="sent_direct_messages")
+    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="received_direct_messages")
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
