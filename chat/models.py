@@ -8,8 +8,10 @@ class Message(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    #def __str__(self):
+    #    return f"{self.user.username}: {self.content[:20]}"
     def __str__(self):
-        return f"{self.user.username}: {self.content[:20]}"
+        return f"Message from user {self.user_id}"
 
 
 class DirectMessage(models.Model):
@@ -21,5 +23,9 @@ class DirectMessage(models.Model):
     class Meta:
         ordering = ["timestamp"]
 
+    #def __str__(self):
+    #       return f"{self.sender.username} -> {self.receiver.username}: {self.content[:20]}"
+
     def __str__(self):
-        return f"{self.sender.username} -> {self.receiver.username}: {self.content[:20]}"
+        return f"DM {self.id} ({self.sender_id} -> {self.receiver_id})"
+
