@@ -69,6 +69,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 class DMConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        self.other_username = self.scope["url_route"]["kwargs"]["username"]
+        self.other_user = await self.get_user(self.other_username)
+
+        if self.scope["user"].is_anonymous:
+            await self.close()
+            return
+
+        self.current_user = self.scope["user"]
+        self.inbox_group = f"user_{self.current_user.id}"
+
+        await self.channel_layer.group_add(self.inbox_group, self.channel_name)
         await self.accept()
 
     async def disconnect(self, close_code):
