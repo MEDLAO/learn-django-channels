@@ -83,4 +83,5 @@ class DMConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.inbox_group, self.channel_name)
 
     async def receive(self, text_data=None, bytes_data=None):
-        pass
+        data = json.loads(text_data)
+        content = data.get("message", "")
