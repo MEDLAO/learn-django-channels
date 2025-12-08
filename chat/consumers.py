@@ -24,10 +24,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):  # Called when the socket closes
         # Remove connection from the group
-        await self.channel_layer.group_discard(
-            self.group_name,
-            self.channel_name
-        )
+        await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
     async def receive(self, text_data=None, bytes_data=None):
         # Convert the incoming text into a Python dict
@@ -83,7 +80,7 @@ class DMConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        pass
+        await self.channel_layer.group_discard(self.inbox_group, self.channel_name)
 
     async def receive(self, text_data=None, bytes_data=None):
         pass
