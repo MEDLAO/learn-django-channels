@@ -19,7 +19,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
-from chat.views import chat_view, signup_view
+from chat.views import chat_view, signup_view, dm_view
 
 
 urlpatterns = [

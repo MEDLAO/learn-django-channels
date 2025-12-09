@@ -85,3 +85,10 @@ class DMConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data=None, bytes_data=None):
         data = json.loads(text_data)
         content = data.get("message", "")
+
+        # Save message in DB
+        msg = await self.create_message(
+            sender=self.current_user,
+            receiver=self.other_user,
+            content=content
+        )
