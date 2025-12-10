@@ -92,3 +92,14 @@ class DMConsumer(AsyncWebsocketConsumer):
             receiver=self.other_user,
             content=content
         )
+
+        # Send message to receiver's group
+        await self.channel_layer.group_send(
+            f"user_{self.other_user.id}",
+            {
+                "type": "dm_message",
+                "sender": self.current_user.username,
+                "content": content,
+                "timestamp": str(msg.timestamp),
+            }
+        )
