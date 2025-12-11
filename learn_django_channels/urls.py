@@ -20,10 +20,13 @@ from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from chat.views import chat_view, signup_view, dm_view
+from django.views.generic.base import RedirectView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path("", RedirectView.as_view(url="/chat/room1/")),
 
     # Login and logout
     path("login/", auth_views.LoginView.as_view(template_name="login.html"), name="login"),
