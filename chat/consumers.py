@@ -86,22 +86,20 @@ class DMConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
         content = data.get("message", "")
 
-        sender = self.user
-        receiver = self.other_user
-
-        # 1. Save message in database
-        await database_sync_to_async(DirectMessage.objects.create)(
-            sender=sender,
-            receiver=receiver,
+        # Save message in DB
+        msg = await self.create_message(
+            sender=self.current_user,
+            receiver=self.other_user,
             content=content
         )
 
-        # 2. Send to receiver's inbox group
+        # Send message to receiver's group
         await self.channel_layer.group_send(
-            f"user_{receiver.id}",
+            f"user_{self.other_user.id}",
             {
                 "type": "dm_message",
-                "sender": sender.username,
+                "sender": self.current_user.username,
                 "content": content,
+                "timestamp": str(msg.timestamp),
             }
         )

@@ -26,7 +26,7 @@ def dm_view(request, username):
         receiver__in=[current_user, other_user],
     )
 
-    return render(request, "dm.html", {"other": other_user, "messages": messages,})
+    return render(request, "dm.html", {"other_user": other_user, "messages": messages, })
 
 
 def signup_view(request):
