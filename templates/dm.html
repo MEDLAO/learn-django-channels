@@ -16,6 +16,8 @@
     {% endfor %}
 </div>
 
+<input id="messageInput" type="text" placeholder="Type a message and press Enter">
+
 <script>
     // The username of the person we are talking to
     const receiverUsername = "{{ other_user.username }}";
@@ -41,8 +43,14 @@
         messagesDiv.appendChild(p);
     };
 
-    // For now, we are not sending messages yet.
-    // We will add sending logic later.
+    document.getElementById("messageInput").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+            socket.send(JSON.stringify({
+                message: e.target.value
+            }));
+            e.target.value = "";
+        }
+    });
 </script>
 
 
