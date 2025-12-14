@@ -120,7 +120,7 @@ class DMConsumer(AsyncWebsocketConsumer):
             }
         )
 
-    async def chat_message(self, event):
+    async def dm_message(self, event):
         sender = event["sender"]
         content = event["content"]
 
