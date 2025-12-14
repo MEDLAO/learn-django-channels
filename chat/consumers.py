@@ -1,6 +1,6 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from chat.models import Message
+from chat.models import Message, DirectMessage
 from django.contrib.auth import get_user_model
 from channels.db import database_sync_to_async
 
@@ -40,7 +40,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         username = user.username
 
         # Save message in the database
-        Message.objects.create(
+        await database_sync_to_async(Message.objects.create)(
             user=user,
             room_name=self.room_name,
             content=message
@@ -97,6 +97,12 @@ class DMConsumer(AsyncWebsocketConsumer):
         content = data.get("message", "")
 
         # Save message in DB
+        await database_sync_to_async(DirectMessage.objects.create)(
+            sender=self.current_user,
+            receiver=self.other_user,
+            content=content
+        )
+
         msg = await self.create_message(
             sender=self.current_user,
             receiver=self.other_user,
@@ -110,6 +116,17 @@ class DMConsumer(AsyncWebsocketConsumer):
                 "type": "dm_message",
                 "sender": self.current_user.username,
                 "content": content,
-                "timestamp": str(msg.timestamp),
+                #"timestamp": str(msg.timestamp),
             }
+        )
+
+    async def chat_message(self, event):
+        sender = event["sender"]
+        content = event["content"]
+
+        await self.send(
+            text_data=json.dumps({
+                "sender": sender,
+                "message": content,
+            })
         )
