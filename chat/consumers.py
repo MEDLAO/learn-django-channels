@@ -103,11 +103,11 @@ class DMConsumer(AsyncWebsocketConsumer):
             content=content
         )
 
-        msg = await self.create_message(
-            sender=self.current_user,
-            receiver=self.other_user,
-            content=content
-        )
+        # msg = await self.create_message(
+        #     sender=self.current_user,
+        #     receiver=self.other_user,
+        #     content=content
+        # )
 
         # Send message to receiver's group
         await self.channel_layer.group_send(

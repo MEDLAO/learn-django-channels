@@ -16,23 +16,27 @@
     {% endfor %}
 </div>
 
-<input id="messageInput" type="text" placeholder="Type a message and press Enter">
+<input
+    id="messageInput"
+    type="text"
+    placeholder="Type a message and press Enter"
+/>
 
 <script>
-    // The username of the person we are talking to
+    // Username of the person we are chatting with
     const receiverUsername = "{{ other_user.username }}";
 
-    // Open the WebSocket connection to DMConsumer
+    // Open WebSocket connection
     const socket = new WebSocket(
         "ws://" + window.location.host + "/ws/dm/" + receiverUsername + "/"
     );
 
-    // Just to test that the WS is connected
+    // Confirm connection
     socket.onopen = function () {
-        console.log("DM WebSocket connected!");
+        console.log("DM WebSocket connected");
     };
 
-    // When we receive a message from the server
+    // Receive messages from server
     socket.onmessage = function (event) {
         const data = JSON.parse(event.data);
 
@@ -43,16 +47,20 @@
         messagesDiv.appendChild(p);
     };
 
+    // Send message on Enter
     document.getElementById("messageInput").addEventListener("keydown", function (e) {
         if (e.key === "Enter") {
+            const message = e.target.value.trim();
+            if (!message) return;
+
             socket.send(JSON.stringify({
-                message: e.target.value
+                message: message
             }));
+
             e.target.value = "";
         }
     });
 </script>
-
 
 </body>
 </html>
